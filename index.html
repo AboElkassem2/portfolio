@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abdallah Ayman Kassem | Software Tester</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Configure Tailwind with our custom colors
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3E6699',
+                        primaryLight: '#4f7cb3',
+                        primaryDark: '#2d4b70',
+                        primaryGradient: 'linear-gradient(135deg, #3E6699 0%, #2d4b70 100%)',
+                        accent: '#E2703A', // Added vibrant accent color
+                        darkBlue: '#1E293B',
+                        lightGray: '#F8FAFC',
+                    },
+                    backgroundImage: {
+                        'gradient-primary': 'linear-gradient(135deg, #3E6699 0%, #2d4b70 100%)',
+                        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, #3E6699 0%, #4f7cb3 50%, #3E6699 100%)',
+                        'gradient-radial': 'radial-gradient(circle, #3E6699 0%, #2d4b70 100%)',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Framer Motion -->
+    <script src="https://unpkg.com/framer-motion@10.12.16/dist/framer-motion.js"></script>
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- AOS Animation Library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+</head>
+
+<body class="bg-white font-['Poppins']">
+    <!-- Preloader -->
+    <div id="preloader" class="fixed inset-0 z-50 flex items-center justify-center bg-white">
+        <div class="preloader-content">
+            <div class="spinner">
+                <div class="double-bounce1 bg-primary"></div>
+                <div class="double-bounce2 bg-accent"></div>
+            </div>
+            <div class="mt-4 text-primary font-medium text-center">Loading<span class="dot-animation">.</span><span
+                    class="dot-animation">.</span><span class="dot-animation">.</span></div>
+        </div>
+    </div>
+
+    <!-- Scroll Progress Indicator -->
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-accent z-50 w-0"></div>
+
+    <!-- Cursor Follow Element -->
+    <div class="cursor-follow"></div>
+
+    <!-- Scroll To Top Button -->
+    <button id="scroll-to-top"
+        class="fixed bottom-6 right-6 w-12 h-12 rounded-full bg-primary text-white shadow-lg flex items-center justify-center z-40 opacity-0 invisible transition-all duration-300">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Background Graphics -->
+    <div class="fixed top-0 left-0 w-full h-full z-0 opacity-10 pointer-events-none">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-radial opacity-60"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-radial opacity-60"></div>
+        <div class="absolute top-1/2 left-1/4 w-96 h-96 bg-gradient-conic opacity-50"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-white/90 backdrop-blur-sm shadow-md z-10 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" class="text-2xl font-bold">
+                        <span class="text-primary">A</span><span class="text-accent">K</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home"
+                        class="text-gray-700 hover:text-primary transition-colors nav-link relative">Home</a>
+                    <a href="#about"
+                        class="text-gray-700 hover:text-primary transition-colors nav-link relative">About</a>
+                    <a href="#skills"
+                        class="text-gray-700 hover:text-primary transition-colors nav-link relative">Skills</a>
+                    <a href="#projects"
+                        class="text-gray-700 hover:text-primary transition-colors nav-link relative">Projects</a>
+                    <a href="#contact"
+                        class="text-gray-700 hover:text-primary transition-colors nav-link relative">Contact</a>
+
+                    <!-- Dark Mode Toggle -->
+                    <button id="theme-toggle"
+                        class="text-gray-700 hover:text-primary p-2 rounded-full transition-all duration-300 focus:outline-none">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+                <div class="md:hidden flex items-center space-x-3">
+                    <!-- Dark Mode Toggle (Mobile) -->
+                    <button id="theme-toggle-mobile"
+                        class="text-gray-700 hover:text-primary p-2 rounded-full transition-all duration-300 focus:outline-none">
+                        <i class="fas fa-moon"></i>
+                    </button>
+
+                    <button id="mobile-menu-button" class="text-gray-700 hover:text-primary">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white/90 backdrop-blur-sm shadow-md">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="block px-3 py-2 text-gray-700 hover:text-primary transition-colors">Home</a>
+                <a href="#about" class="block px-3 py-2 text-gray-700 hover:text-primary transition-colors">About</a>
+                <a href="#skills" class="block px-3 py-2 text-gray-700 hover:text-primary transition-colors">Skills</a>
+                <a href="#projects"
+                    class="block px-3 py-2 text-gray-700 hover:text-primary transition-colors">Projects</a>
+                <a href="#contact"
+                    class="block px-3 py-2 text-gray-700 hover:text-primary transition-colors">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center pt-16 relative overflow-hidden">
+        <!-- Background Shapes -->
+        <div class="absolute inset-0 z-0">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-primary opacity-10 rounded-full filter blur-3xl"></div>
+            <div class="absolute bottom-0 left-0 w-96 h-96 bg-primary opacity-10 rounded-full filter blur-3xl"></div>
+        </div>
+
+        <!-- Animated Background Lines -->
+        <div class="animated-bg-lines"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center md:text-left relative z-1">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="order-2 md:order-1" data-aos="fade-right">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 calm-dark-text"
+                        data-text="Abdallah Ayman Kassem">
+                        <span class="text-gray-800">Abdallah Ayman Kassem</span>
+                    </h1>
+                    <h2 class="text-2xl md:text-3xl font-medium text-primary mb-6 typing-text">Software Tester | Agile
+                        Specialist
+                    </h2>
+                    <p class="text-lg mb-8 text-gray-600">
+                        Passionate about ensuring software quality through comprehensive testing methodologies and
+                        Agile practices.
+                    </p>
+                    <div class="flex flex-wrap gap-4 justify-center md:justify-start">
+                        <a href="#contact"
+                            class="btn-primary bg-primary hover:bg-primaryDark text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 relative overflow-hidden group">
+                            Contact Me
+                            <span
+                                class="absolute right-0 top-0 bg-white h-8 w-1 opacity-20 skew-x-[20deg] group-hover:translate-x-[400%] transition-transform duration-1000"></span>
+                        </a>
+                        <a href="#projects"
+                            class="btn-secondary border-2 border-primary text-primary hover:bg-primary hover:text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105">
+                            View My Work
+                        </a>
+                    </div>
+
+                    <!-- Social Icons -->
+                    <div class="flex gap-4 mt-8">
+                        <a href="https://github.com/AboElkassem2" target="_blank" class="social-icon-home">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://linkedin.com/in/abdallah-kassem-487032321" target="_blank"
+                            class="social-icon-home">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="mailto:abdallahkassdm23@gmail.com" class="social-icon-home">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="order-1 md:order-2 flex justify-center" data-aos="fade-left">
+                    <div class="profile-container">
+                        <div class="profile-card">
+                            <div class="profile-img">
+                                <img src="assets/images/WhatsApp Image 2025-03-12 at 1.11.22 AM.jpeg"
+                                    alt="Abdallah Ayman Kassem" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                        <!-- Floating Skill Tags -->
+                        <div class="floating-tag tag-selenium">Selenium</div>
+                        <div class="floating-tag tag-jira">Jira</div>
+                        <div class="floating-tag tag-agile">Agile</div>
+                        <div class="floating-tag tag-python">Python</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scroll Down Indicator -->
+            <div class="scroll-down-indicator">
+                <a href="#about">
+                    <div class="animate-bounce">
+                        <i class="fas fa-chevron-down text-primary"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 relative overflow-hidden">
+        <!-- Decorative Background Elements -->
+        <div
+            class="absolute top-0 right-0 w-96 h-96 bg-primary opacity-5 rounded-full transform translate-x-1/2 -translate-y-1/2">
+        </div>
+        <div
+            class="absolute bottom-0 left-0 w-96 h-96 bg-primary opacity-5 rounded-full transform -translate-x-1/2 translate-y-1/2">
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-1">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16" data-aos="zoom-in">
+                About <span class="text-primary relative">Me<span
+                        class="absolute -bottom-2 left-0 w-full h-1 bg-primary opacity-50 rounded"></span></span>
+            </h2>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="bg-white rounded-xl p-8 shadow-soft" data-aos="fade-right">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-primary"></i>
+                        </div>
+                        <h3 class="text-2xl font-semibold text-gray-800">Professional Profile</h3>
+                    </div>
+                    <p class="mb-4 text-gray-700">
+                        Abdallah Ayman Kassem is a dedicated Software Tester with expertise in Agile methodologies.
+                        His approach combines technical knowledge with practical testing strategies to ensure software
+                        quality.
+                    </p>
+                    <p class="text-gray-700">
+                        With a strong background in Computer Science and AI, he delivers comprehensive testing solutions
+                        that help teams build robust and reliable software products.
+                    </p>
+                </div>
+                <div class="bg-white rounded-xl p-8 shadow-soft" data-aos="fade-left">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mr-4">
+                            <i class="fas fa-graduation-cap text-primary"></i>
+                        </div>
+                        <h3 class="text-2xl font-semibold text-gray-800">Education</h3>
+                    </div>
+                    <div class="mb-6">
+                        <div class="flex mb-2">
+                            <div class="w-1 bg-primary rounded mr-3"></div>
+                            <h4 class="text-xl font-medium text-primary">Arab Academy for Science and Technology (AAST)
+                            </h4>
+                        </div>
+                        <p class="text-lg text-gray-700 ml-4">Bachelor's in Computer Science</p>
+                        <p class="italic text-gray-600 ml-4">Minor in Artificial Intelligence</p>
+                    </div>
+                    <div>
+                        <div class="flex mb-2">
+                            <div class="w-1 bg-primary rounded mr-3"></div>
+                            <h4 class="text-xl font-medium text-primary">Professional Certification</h4>
+                        </div>
+                        <p class="text-lg text-gray-700 ml-4">DEPI in Software Testing</p>
+                        <p class="italic text-gray-600 ml-4">Specialized in quality assurance methodologies</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-24 bg-gray-50 relative overflow-hidden">
+        <!-- Decorative Background Elements -->
+        <div class="skills-circles"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-1">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16" data-aos="zoom-in">
+                My <span class="text-primary relative">Skills<span
+                        class="absolute -bottom-2 left-0 w-full h-1 bg-primary opacity-50 rounded"></span></span>
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Programming Languages -->
+                <div class="bg-white rounded-xl p-8 shadow-soft hover:transform hover:scale-105 transition-all duration-300 skill-card"
+                    data-aos="flip-left" data-aos-delay="100">
+                    <div class="text-center mb-6">
+                        <div
+                            class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-primary to-primaryDark mb-4 skill-icon-container">
+                            <i class="fas fa-code text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800">Programming Languages</h3>
+                    </div>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="skill-list-item">
+                            <i class="fas fa-check-circle text-primary mr-2"></i>
+                            <span>C</span>
+                        </li>
+                        <li class="skill-list-item">
+                            <i class="fas fa-check-circle text-primary mr-2"></i>
+                            <span>C++</span>
+                        </li>
+                        <li class="skill-list-item">
+                            <i class="fas fa-check-circle text-primary mr-2"></i>
+                            <span>Python</span>
+                        </li>
+                        <li class="skill-list-item">
+                            <i class="fas fa-check-circle text-primary mr-2"></i>
+                            <span>Java</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Testing Tools -->
+                <div class="bg-white rounded-xl p-8 shadow-soft hover:transform hover:scale-105 transition-all duration-300 skill-card"
+                    data-aos="flip-left" data-aos-delay="200">
+                    <div class="text-center mb-6">
+                        <div
+                            class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-primary to-primaryDark mb-4 skill-icon-container">
+                            <i class="fas fa-bug text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800">Testing Tools</h3>
+                    </div>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="skill-list-item">
+                            <i class="fas fa-check-circle text-primary mr-2"></i>
+                            <span>Selenium</span>
+                        </li>
+                        <li class="skill-list-item">
+                            <i class="fas fa-check-circle text-primary mr-2"></i>
+                            <span>Postman</span>
+                        </li>
+                        <li class="skill-list-item">
+                            <i class="fas fa-check-circle text-primary mr-2"></i>
+                            <span>Jira</span>
+                        </li>
+                        <li class="skill-list-item">
+                            <i class="fas fa-check-circle text-primary mr-2"></i>
+                            <span>Agile Methodologies</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Additional Skills -->
+                <div class="bg-white rounded-xl p-8 shadow-soft hover:transform hover:scale-105 transition-all duration-300 skill-card"
+                    data-aos="flip-left" data-aos-delay="300">
+                    <div class="text-center mb-6">
+                        <div
+                            class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-primary to-primaryDark mb-4 skill-icon-container">
+                            <i class="fas fa-palette text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800">Additional Skills</h3>
+                    </div>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="skill-list-item">
+                            <i class="fas fa-check-circle text-primary mr-2"></i>
+                            <span>Video Editing</span>
+                        </li>
+                        <li class="skill-list-item">
+                            <i class="fas fa-check-circle text-primary mr-2"></i>
+                            <span>English-Arabic Translation</span>
+                        </li>
+                        <li class="skill-list-item">
+                            <i class="fas fa-check-circle text-primary mr-2"></i>
+                            <span>UI/UX Design</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-24 relative overflow-hidden">
+        <!-- Abstract Shapes Background -->
+        <div class="projects-shapes"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-1">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16" data-aos="zoom-in">
+                My <span class="text-primary relative">Projects<span
+                        class="absolute -bottom-2 left-0 w-full h-1 bg-primary opacity-50 rounded"></span></span>
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-soft project-card" data-aos="fade-up"
+                    data-aos-delay="100">
+                    <div class="relative group">
+                        <div
+                            class="h-48 bg-gradient-to-r from-primary to-primaryDark flex items-center justify-center overflow-hidden">
+                            <i
+                                class="fas fa-code text-white text-5xl transition-transform duration-500 group-hover:scale-125"></i>
+                        </div>
+                        <div
+                            class="absolute inset-0 bg-primary opacity-0 group-hover:opacity-20 transition-opacity duration-300">
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-gray-800">Automated Test Framework</h3>
+                        <p class="mb-4 text-gray-700">Developed a comprehensive automated testing framework using
+                            Selenium and Python for web applications.</p>
+                        <a href="https://github.com/AboElkassem2" class="project-link">
+                            View on GitHub
+                            <span class="icon-container inline-block ml-2 relative">
+                                <i
+                                    class="fas fa-arrow-right transition-transform duration-300 group-hover:translate-x-1"></i>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-soft project-card" data-aos="fade-up"
+                    data-aos-delay="200">
+                    <div class="relative group">
+                        <div
+                            class="h-48 bg-gradient-to-r from-primary to-primaryDark flex items-center justify-center overflow-hidden">
+                            <i
+                                class="fas fa-gamepad text-white text-5xl transition-transform duration-500 group-hover:scale-125"></i>
+                        </div>
+                        <div
+                            class="absolute inset-0 bg-primary opacity-0 group-hover:opacity-20 transition-opacity duration-300">
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-gray-800">RockPaperScissors</h3>
+                        <p class="mb-4 text-gray-700">A classic Rock Paper Scissors game implementation with an
+                            interactive user interface.</p>
+                        <a href="https://github.com/AboElkassem2/rock-paper-scissors-project-" class="project-link">
+                            View on GitHub
+                            <span class="icon-container inline-block ml-2 relative">
+                                <i
+                                    class="fas fa-arrow-right transition-transform duration-300 group-hover:translate-x-1"></i>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-soft project-card" data-aos="fade-up"
+                    data-aos-delay="300">
+                    <div class="relative group">
+                        <div
+                            class="h-48 bg-gradient-to-r from-primary to-primaryDark flex items-center justify-center overflow-hidden">
+                            <i
+                                class="fas fa-bug text-white text-5xl transition-transform duration-500 group-hover:scale-125"></i>
+                        </div>
+                        <div
+                            class="absolute inset-0 bg-primary opacity-0 group-hover:opacity-20 transition-opacity duration-300">
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-gray-800">Bug Tracking System</h3>
+                        <p class="mb-4 text-gray-700">Customized a Jira-based bug tracking system for improving team
+                            workflow and issue resolution.</p>
+                        <a href="https://github.com/AboElkassem2" class="project-link">
+                            View on GitHub
+                            <span class="icon-container inline-block ml-2 relative">
+                                <i
+                                    class="fas fa-arrow-right transition-transform duration-300 group-hover:translate-x-1"></i>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-gray-50 relative overflow-hidden">
+        <!-- Decorative Elements -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-primary opacity-5 rounded-full"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 bg-primary opacity-5 rounded-full"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-1">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16" data-aos="zoom-in">
+                Get In <span class="text-primary relative">Touch<span
+                        class="absolute -bottom-2 left-0 w-full h-1 bg-primary opacity-50 rounded"></span></span>
+            </h2>
+            <div class="flex justify-center">
+                <div class="max-w-lg w-full" data-aos="zoom-in-up">
+                    <div class="bg-white rounded-xl p-8 shadow-soft contact-card relative overflow-hidden">
+                        <!-- Decorative Corner Element -->
+                        <div
+                            class="absolute top-0 right-0 w-32 h-32 bg-primary opacity-10 rounded-bl-full pointer-events-none">
+                        </div>
+
+                        <h3 class="text-2xl font-semibold mb-8 text-gray-800 flex items-center">
+                            <span class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+                                <i class="fas fa-envelope text-primary"></i>
+                            </span>
+                            Contact Information
+                        </h3>
+                        <div class="space-y-6">
+                            <div class="flex items-start contact-item">
+                                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-4">
+                                    <i class="fas fa-envelope text-primary"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500 mb-1">Email</p>
+                                    <a href="mailto:abdallahkassdm23@gmail.com"
+                                        class="text-gray-700 hover:text-primary transition-colors font-medium">abdallahkassdm23@gmail.com</a>
+                                </div>
+                            </div>
+                            <div class="flex items-start contact-item">
+                                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-4">
+                                    <i class="fab fa-github text-primary"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500 mb-1">GitHub</p>
+                                    <a href="https://github.com/AboElkassem2"
+                                        class="text-gray-700 hover:text-primary transition-colors font-medium"
+                                        target="_blank">github.com/AboElkassem2</a>
+                                </div>
+                            </div>
+                            <div class="flex items-start contact-item">
+                                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-4">
+                                    <i class="fab fa-linkedin text-primary"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500 mb-1">LinkedIn</p>
+                                    <a href="https://linkedin.com/in/abdallah-kassem-487032321"
+                                        class="text-gray-700 hover:text-primary transition-colors font-medium"
+                                        target="_blank">linkedin.com/in/abdallah-kassem-487032321</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-10 flex justify-center space-x-6">
+                            <a href="https://github.com/AboElkassem2" target="_blank" class="social-icon">
+                                <i class="fab fa-github text-xl"></i>
+                            </a>
+                            <a href="https://linkedin.com/in/abdallah-kassem-487032321" target="_blank"
+                                class="social-icon">
+                                <i class="fab fa-linkedin-in text-xl"></i>
+                            </a>
+                            <a href="mailto:abdallahkassdm23@gmail.com" class="social-icon">
+                                <i class="fas fa-envelope text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 relative overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 bg-primary opacity-10 pattern-grid"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-1">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0 text-center md:text-left">
+                    <h2 class="text-2xl font-bold text-primary">Abdallah Ayman Kassem</h2>
+                    <p class="text-gray-600">Software Tester | Agile Specialist</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="https://github.com/AboElkassem2" target="_blank"
+                        class="text-gray-600 hover:text-primary transition-colors">
+                        <i class="fab fa-github text-2xl"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/abdallah-kassem-487032321" target="_blank"
+                        class="text-gray-600 hover:text-primary transition-colors">
+                        <i class="fab fa-linkedin text-2xl"></i>
+                    </a>
+                    <a href="mailto:abdallahkassdm23@gmail.com"
+                        class="text-gray-600 hover:text-primary transition-colors">
+                        <i class="fas fa-envelope text-2xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-200 text-center">
+                <p class="text-gray-600">&copy; 2023 Abdallah Ayman Kassem. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom JS -->
+    <script src="assets/js/main.js"></script>
+    <script>
+        // Initialize AOS Animation Library
+        AOS.init({
+            duration: 800,
+            once: true,
+            easing: 'ease-out-cubic'
+        });
+    </script>
+</body>
+
+</html>
